@@ -1,2 +1,2 @@
-const nextConfig = { reactStrictMode: true, distDir: ".next-dev" };
+const nextConfig = { reactStrictMode: true };
 export default nextConfig;
