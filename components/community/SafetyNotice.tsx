@@ -1,0 +1,1 @@
+export default function SafetyNotice(){return <div className="safety-notice"><strong>安心して利用するために</strong><p>このコミュニティは医療診断の場ではありません。強い症状や急な体調変化がある場合は医療機関へご相談ください。</p><p>誹謗中傷・診断の断定・薬の変更指示・営業や勧誘・個人情報の投稿はお控えください。</p></div>}

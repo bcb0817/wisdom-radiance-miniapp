@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server"; import {addComment} from "../../../../lib/community";
+export async function POST(request:Request){try{const body=await request.json();if(!body.postId||!body.displayName||!body.body)return NextResponse.json({error:"必須項目が不足しています"},{status:400});return NextResponse.json(await addComment(body),{status:201})}catch(error){return NextResponse.json({error:String(error)},{status:500})}}

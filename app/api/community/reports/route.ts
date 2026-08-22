@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server"; import {report} from "../../../../lib/community";
+export async function POST(request:Request){try{const body=await request.json();if(!body.postId&&!body.commentId)return NextResponse.json({error:"対象が必要です"},{status:400});return NextResponse.json(await report({...body,reason:body.reason||"その他"}),{status:201})}catch(error){return NextResponse.json({error:String(error)},{status:500})}}

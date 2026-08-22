@@ -1,0 +1,9 @@
+import {supabase,isSupabaseConfigured} from "./supabase/client";
+import type {CommunityComment,CommunityPost} from "./types";
+import {communityPosts} from "./mockCommunityData";
+export const demoMode=!isSupabaseConfigured;
+export async function listPosts(topic?:string){if(!supabase)return topic?communityPosts.filter(p=>p.topic===topic):communityPosts;const {data,error}=await supabase.from("community_posts").select("*, community_comments(*)").eq("status","published").order("created_at",{ascending:false});if(error)throw error;return (data||[]) as CommunityPost[]}
+export async function createPost(input:{displayName:string;ageRange:string;topic:string;title:string;body:string}){if(!supabase)return {id:`demo-${Date.now()}`, ...input,createdAt:"いま",likes:0,comments:[]} as CommunityPost;const {data,error}=await supabase.from("community_posts").insert({display_name:input.displayName,age_range:input.ageRange,topic_slug:input.topic,title:input.title,body:input.body}).select().single();if(error)throw error;return data}
+export async function addComment(input:{postId:string;displayName:string;body:string}){if(!supabase)return {id:`demo-comment-${Date.now()}`,...input,createdAt:"いま"} as CommunityComment;const {data,error}=await supabase.from("community_comments").insert({post_id:input.postId,display_name:input.displayName,body:input.body}).select().single();if(error)throw error;return data}
+export async function addReaction(postId:string){if(!supabase)return {ok:true};const {error}=await supabase.from("community_reactions").insert({post_id:postId,reaction_type:"like"});if(error)throw error;return {ok:true}}
+export async function report(input:{postId?:string;commentId?:string;reason:string}){if(!supabase)return {ok:true};const {error}=await supabase.from("community_reports").insert({post_id:input.postId,comment_id:input.commentId,reason:input.reason});if(error)throw error;return {ok:true}}

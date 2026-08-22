@@ -1,0 +1,3 @@
+import {NextResponse} from "next/server"; import {createPost,listPosts} from "../../../../lib/community";
+export async function GET(request:Request){try{const topic=new URL(request.url).searchParams.get("topic")||undefined;return NextResponse.json(await listPosts(topic))}catch(error){return NextResponse.json({error:String(error)},{status:500})}}
+export async function POST(request:Request){try{const body=await request.json();if(!body.displayName||!body.title||!body.body||!body.topic)return NextResponse.json({error:"必須項目が不足しています"},{status:400});return NextResponse.json(await createPost(body),{status:201})}catch(error){return NextResponse.json({error:String(error)},{status:500})}}
