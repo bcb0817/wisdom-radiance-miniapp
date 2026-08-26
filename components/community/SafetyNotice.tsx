@@ -1,1 +1,1 @@
-export default function SafetyNotice(){return <div className="safety-notice"><strong>安心して利用するために</strong><p>このコミュニティは医療診断の場ではありません。強い症状や急な体調変化がある場合は医療機関へご相談ください。</p><p>誹謗中傷・診断の断定・薬の変更指示・営業や勧誘・個人情報の投稿はお控えください。</p></div>}
+export default function SafetyNotice(){return <div className="safety-notice"><strong>安心して参加するためのここでの小さなルール</strong><p>□読むだけでもOK。</p><p>□話したいとき、聞いてほしいときは、匿名で投稿OK。</p><p>□売込みや勧誘、個人の特定や誰かを傷つける投稿はご遠慮ください。</p><p>□病気やお薬についての専門的なアドバイスの場ではありません。</p><p>□強い症状や急な体調変化があるときは、医療機関へご相談ください。</p></div>}
