@@ -31,3 +31,4 @@ create policy "anonymous reactions insert" on public.community_reactions for ins
 drop policy if exists "anonymous reports insert" on public.community_reports;
 create policy "anonymous reports insert" on public.community_reports for insert to anon, authenticated with check (post_id is not null or comment_id is not null);
 revoke all on public.moderation_blocks from anon, authenticated;
+grant select on public.moderation_blocks to anon, authenticated;
