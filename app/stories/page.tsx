@@ -1,2 +1,2 @@
-import Link from "next/link";import {stories} from "../../lib/mockData";
-export default function StoriesPage(){return <main className="phone-shell"><section className="page-content"><p className="eyebrow">STORIES</p><h1>みんなの体験談を読んでみる。</h1><p className="lead">同じような悩みや変化を経験した人の声に、自由に触れてみてください。</p><div className="post-list">{stories.map(s=><Link key={s.id} href={`/stories/${s.id}`} className="community-card"><div className="post-meta"><span className="avatar">{s.age}</span><span>{s.age}歳の体験</span><time>体験談</time></div><div className="tags"><span>#{s.topic}</span></div><h2>{s.title}</h2><p>{s.intro}</p></Link>)}</div></section></main>}
+import {redirect} from "next/navigation";
+export default function StoriesPage(){redirect("/community")}
