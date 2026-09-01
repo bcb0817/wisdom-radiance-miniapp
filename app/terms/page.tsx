@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function Terms(){return <main className="phone-shell"><section className="page-content"><Link href="/" className="back-link">← ホームへ戻る</Link><p className="eyebrow">TERMS OF USE</p><h1>利用規約</h1><p className="lead">本規約は、Wisdom Radianceの利用条件を定めるものです。</p><h2>利用について</h2><p>利用者は、他の利用者を尊重し、正確かつ適切な内容を投稿してください。</p><h2>禁止事項</h2><p>誹謗中傷、個人の特定、営業・勧誘、なりすまし、その他運営の趣旨にそぐわない行為を禁止します。</p><h2>投稿の管理</h2><p>運営は、規約に違反する投稿を削除し、利用を制限することがあります。</p><h2>免責事項</h2><p>本サービスは医療行為や診断を提供するものではありません。症状がある場合は医療機関へご相談ください。</p></section></main>}

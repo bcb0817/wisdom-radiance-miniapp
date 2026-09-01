@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function Privacy(){return <main className="phone-shell"><section className="page-content"><Link href="/" className="back-link">← ホームへ戻る</Link><p className="eyebrow">PRIVACY POLICY</p><h1>プライバシーポリシー</h1><p className="lead">Wisdom Radiance（以下「本サービス」）は、利用者の個人情報を適切に取り扱います。</p><h2>取得する情報</h2><p>LINEユーザー識別情報、匿名表示名、年代、投稿・返信・通報など、本サービスの提供に必要な情報を取得します。</p><h2>利用目的</h2><p>本人確認、投稿・返信の表示、サービス改善、安全なコミュニティ運営のために利用します。</p><h2>第三者提供</h2><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><h2>お問い合わせ</h2><p>個人情報に関するお問い合わせは、公式LINEよりご連絡ください。</p></section></main>}
