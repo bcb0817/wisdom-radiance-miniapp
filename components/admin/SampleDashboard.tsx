@@ -47,6 +47,6 @@ export default function SampleDashboard() {
       <article><h3>年代別の投稿数</h3><table><thead><tr><th>年代</th><th>件数</th><th>割合</th></tr></thead><tbody>{data.ages.map(([age,n]) => <tr key={age}><td>{age}</td><td>{n}件</td><td>{Math.round(Number(n)/data.total*100)}%</td></tr>)}</tbody></table></article>
       <article className={styles.full}><h3>未分類の声を確認する</h3><p>「家族の介護と自分の体調管理を、どう両立したらいいか分からない」</p><p className={styles.note}>架空の記述例 ／ カテゴリ：その他</p><button type="button" aria-expanded={showTags} onClick={()=>setShowTags(!showTags)}>{showTags ? "候補を閉じる" : "分析タグの候補を見る"}</button>{showTags && <div><span className={styles.tag}>介護との両立</span><span className={styles.tag}>自分のケア</span><p className={styles.note}>固定のサンプル候補です。AI分析・データ保存は行いません。</p></div>}</article>
     </div>
-    <p className={styles.note}>分析タグは複数付与のため、合計は投稿件数を超える場合があります。実際の投稿承認・通報確認は下の欄から操作できます。</p>
+    <p className={styles.note}>分析タグは複数付与のため、合計は投稿件数を超える場合があります。実際の投稿承認・通報確認は運営モデレーション画面から操作できます。</p>
   </section>;
 }
