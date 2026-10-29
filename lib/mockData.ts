@@ -1,14 +1,14 @@
-// Excel Sheet2, rows 4–44. Preserve source wording; only normalize category labels.
+// Revised survey Sheet2, rows 4–44. Source wording and row order are preserved.
+export {communityTopics as topics} from "./topics";
 export type Story = { id: string; age: number; gender: string; title: string; topic: string; tags: string[]; intro: string };
-export const topics = ["疲れ・倦怠感", "ほてり・発汗", "イライラ・怒り", "頭痛・めまい", "不眠", "気分の落ち込み", "冷え・むくみ"];
 export const stories: Story[] = [
   {
     "id": "voice-excel-4",
     "age": 40,
     "gender": "女性",
-    "topic": "気分の落ち込み",
+    "topic": "その他",
     "tags": [
-      "気分の落ち込み"
+      "その他"
     ],
     "title": "相談する相手がいない",
     "intro": "深刻な悩みはまだないが、相談する相手がいなかったり、吐き出すところがないこともつらいのではないかと思う。"
@@ -17,9 +17,9 @@ export const stories: Story[] = [
     "id": "voice-excel-5",
     "age": 50,
     "gender": "女性",
-    "topic": "ほてり・発汗",
+    "topic": "その他",
     "tags": [
-      "ほてり・発汗"
+      "その他"
     ],
     "title": "更年期なのか分からない",
     "intro": "いろいろな不調があるけれど、どれが更年期の症状なのか分からない。"
@@ -28,9 +28,9 @@ export const stories: Story[] = [
     "id": "voice-excel-6",
     "age": 51,
     "gender": "女性",
-    "topic": "ほてり・発汗",
+    "topic": "戸惑い・不安",
     "tags": [
-      "ほてり・発汗"
+      "戸惑い・不安"
     ],
     "title": "終わりが見えない不安",
     "intro": "更年期がいつ終わるのか分からないことが不安。"
@@ -39,9 +39,11 @@ export const stories: Story[] = [
     "id": "voice-excel-7",
     "age": 43,
     "gender": "女性",
-    "topic": "冷え・むくみ",
+    "topic": "気分の落ち込み",
     "tags": [
-      "冷え・むくみ"
+      "気分の落ち込み",
+      "不眠",
+      "ほてり・発汗"
     ],
     "title": "不調を自分でコントロールできない",
     "intro": "不眠や発汗などが急に出たり出なかったりする不安定さや、落ち込みなど、自分でコントロールできなくなることが不安。"
@@ -50,9 +52,9 @@ export const stories: Story[] = [
     "id": "voice-excel-8",
     "age": 49,
     "gender": "女性",
-    "topic": "不眠",
+    "topic": "戸惑い・不安",
     "tags": [
-      "不眠"
+      "戸惑い・不安"
     ],
     "title": "閉経後の体の変化が不安",
     "intro": "生理がなくなったら、循環が悪くなり体調が変わるのか不安。"
@@ -61,9 +63,9 @@ export const stories: Story[] = [
     "id": "voice-excel-9",
     "age": 51,
     "gender": "女性",
-    "topic": "頭痛・めまい",
+    "topic": "戸惑い・不安",
     "tags": [
-      "頭痛・めまい・ふらつき"
+      "戸惑い・不安"
     ],
     "title": "この先の対策への不安",
     "intro": "できる対策はしてきたが、これがいつまで続くのか不安。今まで効いていたものが効かなくなり、次に何をすればいいのかも不安。"
@@ -74,7 +76,8 @@ export const stories: Story[] = [
     "gender": "女性",
     "topic": "疲れ・倦怠感",
     "tags": [
-      "疲れ・倦怠感"
+      "疲れ・倦怠感",
+      "体重・体型の変化"
     ],
     "title": "疲れやすく、痩せにくくなった",
     "intro": "顕著な症状はないけれど、年々疲れやすくなり、痩せなくなった。"
@@ -83,9 +86,9 @@ export const stories: Story[] = [
     "id": "voice-excel-11",
     "age": 41,
     "gender": "女性",
-    "topic": "疲れ・倦怠感",
+    "topic": "戸惑い・不安",
     "tags": [
-      "疲れ・倦怠感"
+      "戸惑い・不安"
     ],
     "title": "先の変化が分からない",
     "intro": "自分がこれからどうなるのか分からないことが不安。"
@@ -94,9 +97,9 @@ export const stories: Story[] = [
     "id": "voice-excel-12",
     "age": 52,
     "gender": "女性",
-    "topic": "ほてり・発汗",
+    "topic": "疲れ・倦怠感",
     "tags": [
-      "ほてり・発汗"
+      "疲れ・倦怠感"
     ],
     "title": "不調の原因が分からない",
     "intro": "どこまでが更年期で、どこまでが単なる疲れなのか分からない。"
@@ -105,9 +108,9 @@ export const stories: Story[] = [
     "id": "voice-excel-13",
     "age": 55,
     "gender": "女性",
-    "topic": "疲れ・倦怠感",
+    "topic": "戸惑い・不安",
     "tags": [
-      "疲れ・倦怠感"
+      "戸惑い・不安"
     ],
     "title": "生理が終わらない不安",
     "intro": "なかなか生理が終わらないことも不安になった。"
@@ -118,7 +121,8 @@ export const stories: Story[] = [
     "gender": "女性",
     "topic": "疲れ・倦怠感",
     "tags": [
-      "疲れ・倦怠感"
+      "疲れ・倦怠感",
+      "不眠"
     ],
     "title": "疲れと夜中のトイレ",
     "intro": "このままずっと疲れやすく、トイレに行きたくて深夜に目が覚めてしまうのか心配。"
@@ -127,9 +131,9 @@ export const stories: Story[] = [
     "id": "voice-excel-15",
     "age": 52,
     "gender": "女性",
-    "topic": "疲れ・倦怠感",
+    "topic": "不眠",
     "tags": [
-      "疲れ・倦怠感"
+      "不眠"
     ],
     "title": "不眠による日中の眠気",
     "intro": "不眠による昼間の眠気が生活に支障があり、どうにかしたい。"
@@ -138,9 +142,9 @@ export const stories: Story[] = [
     "id": "voice-excel-16",
     "age": 48,
     "gender": "女性",
-    "topic": "疲れ・倦怠感",
+    "topic": "戸惑い・不安",
     "tags": [
-      "疲れ・倦怠感"
+      "戸惑い・不安"
     ],
     "title": "先が見えない不安",
     "intro": "更年期の不調がいつまで続くのか、先が見えないことに不安を感じる。"
@@ -149,8 +153,9 @@ export const stories: Story[] = [
     "id": "voice-excel-17",
     "age": 48,
     "gender": "女性",
-    "topic": "頭痛・めまい",
+    "topic": "イライラ・怒り",
     "tags": [
+      "イライラ・怒り",
       "頭痛・めまい・ふらつき"
     ],
     "title": "イライラやめまいが怖い",
@@ -160,9 +165,9 @@ export const stories: Story[] = [
     "id": "voice-excel-18",
     "age": 48,
     "gender": "女性",
-    "topic": "ほてり・発汗",
+    "topic": "戸惑い・不安",
     "tags": [
-      "ほてり・発汗"
+      "戸惑い・不安"
     ],
     "title": "これから症状が悪化する不安",
     "intro": "まだ初期だと思うが、今後症状が悪化するのではないか不安。事前に準備して軽減できるなら取り入れたい。"
@@ -171,9 +176,9 @@ export const stories: Story[] = [
     "id": "voice-excel-19",
     "age": 40,
     "gender": "女性",
-    "topic": "冷え・むくみ",
+    "topic": "戸惑い・不安",
     "tags": [
-      "冷え・むくみ"
+      "戸惑い・不安"
     ],
     "title": "仕事を続けられるか不安",
     "intro": "本格的な症状が出てきた場合、普段どおりに仕事を続けられるのか不安。"
@@ -184,7 +189,8 @@ export const stories: Story[] = [
     "gender": "女性",
     "topic": "ほてり・発汗",
     "tags": [
-      "ほてり・発汗"
+      "ほてり・発汗",
+      "戸惑い・不安"
     ],
     "title": "症状が出る前に備えたいけれど",
     "intro": "急なほてりや発汗がとてもつらかった経験があり、今後本格的な更年期に入ったときの症状が不安。更年期前・更年期後、それぞれでできる対策を知りたい。"
@@ -193,9 +199,9 @@ export const stories: Story[] = [
     "id": "voice-excel-21",
     "age": 51,
     "gender": "女性",
-    "topic": "疲れ・倦怠感",
+    "topic": "戸惑い・不安",
     "tags": [
-      "疲れ・倦怠感"
+      "戸惑い・不安"
     ],
     "title": "職場での理解がない",
     "intro": "更年期について会社での認知度が低いこと。"
@@ -204,9 +210,9 @@ export const stories: Story[] = [
     "id": "voice-excel-22",
     "age": 44,
     "gender": "女性",
-    "topic": "気分の落ち込み",
+    "topic": "イライラ・怒り",
     "tags": [
-      "気分の落ち込み"
+      "イライラ・怒り"
     ],
     "title": "ホルモンの影響か分からない",
     "intro": "イライラなどが気分によるものなのか、ホルモンの影響なのか判断しづらく、自己嫌悪に陥る。いつまで続くのかも分からない。"
@@ -215,9 +221,9 @@ export const stories: Story[] = [
     "id": "voice-excel-23",
     "age": 40,
     "gender": "女性",
-    "topic": "気分の落ち込み",
+    "topic": "戸惑い・不安",
     "tags": [
-      "気分の落ち込み"
+      "戸惑い・不安"
     ],
     "title": "更年期の治療への不安",
     "intro": "これからどんな体の変化が起こるのか不安。治療法や費用、どんな病院・クリニックに行けばいいのかも気になる。"
@@ -237,9 +243,9 @@ export const stories: Story[] = [
     "id": "voice-excel-25",
     "age": 45,
     "gender": "女性",
-    "topic": "ほてり・発汗",
+    "topic": "戸惑い・不安",
     "tags": [
-      "ほてり・発汗"
+      "戸惑い・不安"
     ],
     "title": "閉経後の不調も不安",
     "intro": "更年期がいつ終わるのか、終わった後に新たな不調が出ないのか不安。"
@@ -272,7 +278,8 @@ export const stories: Story[] = [
     "gender": "男性",
     "topic": "気分の落ち込み",
     "tags": [
-      "気分の落ち込み"
+      "気分の落ち込み",
+      "原因不明の不調"
     ],
     "title": "原因の分からない不調",
     "intro": "気持ちの落ち込みや、原因の分からない不調がある。"
@@ -292,9 +299,9 @@ export const stories: Story[] = [
     "id": "voice-excel-30",
     "age": 58,
     "gender": "男性",
-    "topic": "疲れ・倦怠感",
+    "topic": "体重・体型の変化",
     "tags": [
-      "疲れ・倦怠感"
+      "体重・体型の変化"
     ],
     "title": "体の変化",
     "intro": "筋力が低下してきた。"
@@ -303,9 +310,10 @@ export const stories: Story[] = [
     "id": "voice-excel-31",
     "age": 40,
     "gender": "女性",
-    "topic": "気分の落ち込み",
+    "topic": "戸惑い・不安",
     "tags": [
-      "気分の落ち込み"
+      "戸惑い・不安",
+      "原因不明の不調"
     ],
     "title": "40歳からの体調変化",
     "intro": "まだ40歳なので、体調不良になるたびに「これは更年期なのか？」と分からない。"
@@ -314,9 +322,10 @@ export const stories: Story[] = [
     "id": "voice-excel-32",
     "age": 49,
     "gender": "女性",
-    "topic": "気分の落ち込み",
+    "topic": "戸惑い・不安",
     "tags": [
-      "気分の落ち込み"
+      "戸惑い・不安",
+      "原因不明の不調"
     ],
     "title": "不調がいつまで続くのか",
     "intro": "今の不調がいつまで続くのか不安。"
@@ -325,9 +334,9 @@ export const stories: Story[] = [
     "id": "voice-excel-33",
     "age": 43,
     "gender": "女性",
-    "topic": "冷え・むくみ",
+    "topic": "体重・体型の変化",
     "tags": [
-      "冷え・むくみ"
+      "体重・体型の変化"
     ],
     "title": "体の変化",
     "intro": "痩せにくくなった。"
@@ -336,9 +345,9 @@ export const stories: Story[] = [
     "id": "voice-excel-34",
     "age": 43,
     "gender": "女性",
-    "topic": "頭痛・めまい",
+    "topic": "体重・体型の変化",
     "tags": [
-      "頭痛・めまい・ふらつき"
+      "体重・体型の変化"
     ],
     "title": "体重・食欲の変化",
     "intro": "太りやすくなり、食欲が爆発することがある。"
@@ -358,9 +367,9 @@ export const stories: Story[] = [
     "id": "voice-excel-36",
     "age": 48,
     "gender": "女性",
-    "topic": "イライラ・怒り",
+    "topic": "その他",
     "tags": [
-      "イライラ・怒り"
+      "その他"
     ],
     "title": "感情・身体の変化",
     "intro": "気持ちをコントロールすることや、身体の痛みが気になる。"
@@ -369,9 +378,9 @@ export const stories: Story[] = [
     "id": "voice-excel-37",
     "age": 51,
     "gender": "男性",
-    "topic": "疲れ・倦怠感",
+    "topic": "戸惑い・不安",
     "tags": [
-      "疲れ・倦怠感"
+      "戸惑い・不安"
     ],
     "title": "変わることへの不安",
     "intro": "自分の人格が変わってしまうことが不安。"
@@ -382,7 +391,7 @@ export const stories: Story[] = [
     "gender": "女性",
     "topic": "その他",
     "tags": [
-      "かゆみ"
+      "その他"
     ],
     "title": "PMS症状の悪化",
     "intro": "閉経に向かうにつれてPMS症状が悪化しているように感じる。アレルギーや気管支炎も悪化し、閉経後も続くのではないかと不安。"
@@ -391,9 +400,9 @@ export const stories: Story[] = [
     "id": "voice-excel-39",
     "age": 49,
     "gender": "女性",
-    "topic": "気分の落ち込み",
+    "topic": "その他",
     "tags": [
-      "気分の落ち込み"
+      "その他"
     ],
     "title": "閉経後への不安",
     "intro": "閉経したあと、今後どのような体の変化があるのか知りたい。"
@@ -402,9 +411,9 @@ export const stories: Story[] = [
     "id": "voice-excel-40",
     "age": 56,
     "gender": "女性",
-    "topic": "ほてり・発汗",
+    "topic": "その他",
     "tags": [
-      "ほてり・発汗"
+      "その他"
     ],
     "title": "医療機関選びに迷う",
     "intro": "更年期の症状が出たとき、どの医療機関を選べばいいのか分からない。"
@@ -413,9 +422,9 @@ export const stories: Story[] = [
     "id": "voice-excel-41",
     "age": 53,
     "gender": "女性",
-    "topic": "頭痛・めまい",
+    "topic": "体重・体型の変化",
     "tags": [
-      "頭痛・めまい・ふらつき"
+      "体重・体型の変化"
     ],
     "title": "体型と肌の変化",
     "intro": "代謝が悪くなることによる体型の変化や、肝斑などの肌の問題が気になる。"
@@ -424,9 +433,9 @@ export const stories: Story[] = [
     "id": "voice-excel-42",
     "age": 48,
     "gender": "女性",
-    "topic": "疲れ・倦怠感",
+    "topic": "その他",
     "tags": [
-      "疲れ・倦怠感"
+      "その他"
     ],
     "title": "閉経後の体の変化",
     "intro": "現在はそこまで不安はありませんが、閉経後にどこまで体が変化するのかわからないのが不安です"
@@ -435,9 +444,9 @@ export const stories: Story[] = [
     "id": "voice-excel-43",
     "age": 58,
     "gender": "女性",
-    "topic": "頭痛・めまい",
+    "topic": "戸惑い・不安",
     "tags": [
-      "頭痛・めまい・ふらつき"
+      "戸惑い・不安"
     ],
     "title": "今後への不安",
     "intro": "更年期の症状がいつ治まるのか不安だった。"
@@ -446,9 +455,9 @@ export const stories: Story[] = [
     "id": "voice-excel-44",
     "age": 59,
     "gender": "女性",
-    "topic": "頭痛・めまい",
+    "topic": "その他",
     "tags": [
-      "頭痛・めまい・ふらつき"
+      "その他"
     ],
     "title": "相談先がわからない",
     "intro": "更年期の不調について、どこに、誰に相談すればいいのか分からない。"
