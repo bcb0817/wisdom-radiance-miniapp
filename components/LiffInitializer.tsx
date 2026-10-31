@@ -1,3 +1,4 @@
 "use client";
-import {useEffect} from "react";import liff from "@line/liff";
-export default function LiffInitializer(){useEffect(()=>{const id=process.env.NEXT_PUBLIC_LIFF_ID;if(!id)return;let active=true;const initialize=async()=>{try{await liff.init({liffId:id});if(!active)return;if(liff.isLoggedIn()){const token=liff.getIDToken();if(token){const response=await fetch("/api/auth/line",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idToken:token})});if(!response.ok)console.error("LINE user registration failed",await response.text())}}}catch(error){console.error("LIFF initialization failed",error)}};void initialize();return()=>{active=false}},[]);return null}
+import {useEffect} from "react";
+import {initializeLineSession} from "../lib/lineSessionClient";
+export default function LiffInitializer(){useEffect(()=>{void initializeLineSession()},[]);return null}
