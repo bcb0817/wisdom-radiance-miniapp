@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const ts=require('typescript');
+let calls=[],user='user-a',origin=true,visible=true;
+const db={from(table){const call={table};calls.push(call);const q={select(){return q},eq(k,v){call[k]=v;return q},maybeSingle(){return Promise.resolve({data:visible?{id:'post'}:null})},upsert(value,options){call.value=value;call.options=options;return Promise.resolve({error:null})},delete(){call.remove=true;return q},then(resolve,reject){return Promise.resolve({error:null,data:table==='story_saves'?[{story_id:'voice-excel-4',created_at:'2026-10-31'}]:[{post_id:'public',created_at:'2026-10-30',community_posts:{title:'Public',status:'published'}},{post_id:'private',created_at:'2026-10-29',community_posts:{title:'Private',status:'pending'}}]}).then(resolve,reject)}};return q}};
+const moduleResult={exports:{}};
+const source=ts.transpileModule(fs.readFileSync('app/api/me/saves/route.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
+vm.runInNewContext(source,{exports:moduleResult.exports,module:moduleResult,require(id){if(id==='next/server')return {NextResponse:{json:(body,options={})=>({body,status:options.status||200})}};if(id.endsWith('/admin'))return {adminSupabase:db};if(id.endsWith('/accountSession'))return {accountId:async()=>user,sameOrigin:()=>origin};if(id.endsWith('/mockData'))return {stories:[{id:'voice-excel-4',title:'Excel'}]};throw Error(id)}});
+const api=moduleResult.exports,req=body=>({json:async()=>body});
+(async()=>{
+ let r=await api.GET(req());assert.equal(r.body.length,2);assert.equal(r.body[0].href,'/stories/voice-excel-4');assert(!r.body.some(s=>s.id==='private'));
+ calls=[];r=await api.POST(req({storyId:'voice-excel-4',userId:'attacker'}));assert.equal(r.status,200);assert.equal(calls[0].value.user_id,'user-a');assert.equal(calls[0].options.ignoreDuplicates,true);
+ calls=[];await api.DELETE(req({storyId:'voice-excel-4'}));assert.equal(calls[0].user_id,'user-a');assert.equal(calls[0].story_id,'voice-excel-4');assert.equal(calls[0].remove,true);
+ assert.equal((await api.POST(req({storyId:'missing'}))).status,400);
+ assert.equal((await api.POST(req({storyId:'voice-excel-4',postId:'x'}))).status,400);
+ assert.equal((await api.POST(req(null))).status,400);
+ visible=false;assert.equal((await api.POST(req({postId:'11111111-1111-1111-1111-111111111111'}))).status,404);
+ origin=false;assert.equal((await api.POST(req({storyId:'voice-excel-4'}))).status,403);
+ origin=true;user=null;assert.equal((await api.POST(req({storyId:'voice-excel-4'}))).status,401);
+ console.log('PASS: Excel/community listing, private filtering, identity isolation, save/remove, validation, origin and auth');
+})().catch(e=>{console.error(e);process.exitCode=1});
