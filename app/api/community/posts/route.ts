@@ -11,6 +11,6 @@ if(await isAccountBlocked(userId))return NextResponse.json({error:"投稿を制�
 const b=await r.json();if(typeof b.title!=="string"||!b.title.trim()||b.title.length>100||typeof b.body!=="string"||!b.body.trim()||b.body.length>10000||!communityTopics.includes(b.topic))return NextResponse.json({error:"投稿内容を確認してください"},{status:400});
 const {data:user}=await adminSupabase.from("users").select("display_name,age_range").eq("id",userId).single();
 if(!user?.age_range)return NextResponse.json({error:"先にマイページで名前と年代を保存してください"},{status:400});
-const {data,error}=await adminSupabase.from("community_posts").insert({user_id:userId,display_name:user.display_name,age_range:user.age_range,topic_slug:b.topic,title:b.title,body:b.body,status:"pending"}).select("id,title,body,created_at").single();
-if(error)throw error;return NextResponse.json({...data,displayName:user.display_name,ageRange:user.age_range,topic:b.topic,status:"pending",createdAt:data.created_at,likes:0,comments:[]},{status:201});
+const {data,error}=await adminSupabase.from("community_posts").insert({user_id:userId,display_name:user.display_name,age_range:user.age_range,topic_slug:b.topic,title:b.title,body:b.body,status:"published"}).select("id,title,body,created_at").single();
+if(error)throw error;return NextResponse.json({...data,displayName:user.display_name,ageRange:user.age_range,topic:b.topic,status:"published",createdAt:data.created_at,likes:0,comments:[]},{status:201});
 }catch{return NextResponse.json({error:"投稿できませんでした。時間をおいてお試しください。"},{status:500})}}
