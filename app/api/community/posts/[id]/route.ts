@@ -1,6 +1,7 @@
 import {NextRequest,NextResponse} from "next/server";
 import {adminSupabase} from "../../../../../lib/supabase/admin";
 import {accountId} from "../../../../../lib/accountSession";
+export const dynamic="force-dynamic";
 export async function GET(r:NextRequest,{params}:{params:{id:string}}){
  if(!adminSupabase)return NextResponse.json({error:"現在読み込めません"},{status:503});
  const {data:p,error}=await adminSupabase.from("community_posts").select("*,community_comments(*)").eq("id",params.id).maybeSingle();
