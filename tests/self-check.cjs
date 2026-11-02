@@ -1,0 +1,46 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const ts=require('typescript');
+function loader(overrides={}){const cache={};return function load(file){file=path.resolve(file);if(cache[file])return cache[file].exports;const m={exports:{}};cache[file]=m;const code=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;vm.runInNewContext(code,{module:m,exports:m.exports,require(id){if(id in overrides)return overrides[id];if(id.startsWith('.'))return load(path.resolve(path.dirname(file),id)+'.ts');throw Error(id)},console});return m.exports}}
+const load=loader(),questions=load('lib/checkQuestions.ts'),scoring=load('lib/checkScoring.ts'),recommend=load('lib/checkRecommendations.ts');
+const answers=n=>Object.fromEntries(questions.checkQuestions.map(q=>[q.id,n]));
+const valid={answers:answers(0),age_range:'45〜49歳',awareness_level:'never'};
+assert(scoring.parseCheckInput(valid));
+for(const invalid of [null,{}, {...valid,answers:[]},{...valid,answers:{...answers(0),sleep:-1}},{...valid,answers:{...answers(0),sleep:4}},{...valid,answers:{...answers(0),sleep:'1'}},{...valid,answers:{...answers(0),extra:0}},{...valid,age_range:'407'},{...valid,awareness_level:'other'}])assert.equal(scoring.parseCheckInput(invalid),null);
+assert.equal(scoring.scoreCheck(answers(0)).burden_level,'low');
+assert.equal(scoring.scoreCheck(answers(3)).total_score,30);
+assert.equal(scoring.scoreCheck(answers(3)).burden_level,'high');
+assert.equal(scoring.scoreCheck({...answers(0),sleep:3}).burden_level,'moderate');
+assert.equal(scoring.scoreCheck({...answers(0),sleep:3}).needs_medical_info,true);
+assert.equal(scoring.scoreCheck({...answers(0),sleep:3,fatigue:3}).burden_level,'high');
+assert.equal(scoring.scoreCheck({...answers(0),sleep:1,fatigue:1,mood:1,pain:1}).burden_level,'low');
+assert.equal(scoring.scoreCheck({...answers(0),sleep:1,fatigue:1,mood:1,pain:1,cold:1}).burden_level,'moderate');
+assert.equal(scoring.scoreCheck(answers(0)).top_symptoms.length,0);
+assert.equal(scoring.scoreCheck(answers(3)).top_symptoms.length,5);
+for(const age of ['aware','maybe','unlikely','never'])assert.equal(scoring.scoreCheck(scoring.parseCheckInput({...valid,awareness_level:age}).answers).total_score,0);
+for(const [raw,want] of [['47','45〜49歳'],['40歳','40〜44歳'],['54','50〜54歳'],['55','55〜59歳'],['60','60歳以上'],['30代','30代以下'],['40代',''],['50代',''],['407','']])assert.equal(questions.initialAgeRange(raw),want);
+for(const id of ['sleep','fatigue','hot_flash','irritability','mood','dizziness','cold']){const v=recommend.recommendVoices([id]);assert(v.length>0&&v.length<=3);assert(v.every(x=>x.href.startsWith('/')))}
+assert(recommend.recommendVoices(['cold']).every(v=>v.sample));
+assert(recommend.recommendVoices(['sleep']).some(v=>v.tags.includes('不眠')));
+let calls=[],kind='line',user='user-a',origin=true,blocked=false,dbError=false,duplicate=false;
+const resultId='11111111-1111-4111-8111-111111111111';
+const db={from(table){const c={table,filters:{}};calls.push(c);const q={select(v){c.fields=v;return q},eq(k,v){c.filters[k]=v;return q},order(){return q},limit(n){c.limit=n;return q},insert(v){c.insert=v;return q},delete(){c.delete=true;return q},single(){return Promise.resolve({data:dbError||duplicate?null:{id:resultId},error:dbError?{code:'db'}:duplicate?{code:'23505'}:null})},maybeSingle(){return Promise.resolve({data:table==='users'?{line_user_id:'verified-line-id'}:c.filters.user_id===user&&c.filters.id!=='22222222-2222-4222-8222-222222222222'?{id:resultId,...valid,...scoring.scoreCheck(valid.answers)}:null,error:dbError?{code:'db'}:null})},then(resolve,reject){return Promise.resolve({data:[],error:dbError?{}:null}).then(resolve,reject)}};return q}};
+const api=loader({'next/server':{NextResponse:{json:(body,options)=>({body,...options})}},'../../../../lib/supabase/admin':{adminSupabase:db},'../../../../lib/accountSession':{accountId:async()=>user,readSession:()=>user?{kind}:null,sameOrigin:()=>origin,isAccountBlocked:async()=>blocked}})('app/api/me/checks/route.ts');
+const request=(body={},id)=>({json:async()=>body,nextUrl:new URL('https://test/api/me/checks'+(id?'?id='+id:''))});
+(async()=>{
+ const body={...valid,request_id:resultId,consent:true,user_id:'attacker',total_score:999,burden_level:'high'};
+ kind='guest';assert.equal((await api.POST(request(body))).status,401);assert.equal((await api.GET(request())).status,401);assert(!calls.some(c=>c.insert));
+ kind='line';origin=false;assert.equal((await api.POST(request(body))).status,403);origin=true;
+ assert.equal((await api.POST(request({...body,consent:false}))).status,400);
+ blocked=true;assert.equal((await api.POST(request(body))).status,403);blocked=false;
+ calls=[];assert.equal((await api.POST(request(body))).status,201);const inserted=calls.find(c=>c.insert).insert;assert.equal(inserted.user_id,'user-a');assert.equal(inserted.total_score,0);assert.equal(inserted.burden_level,'low');assert(!('display_name' in inserted));
+ duplicate=true;assert.equal((await api.POST(request(body))).status,200);duplicate=false;
+ calls=[];const list=await api.GET(request());assert.equal(list.status,200);assert.equal(list.headers['Cache-Control'],'private, no-store');const query=calls.find(c=>c.table==='self_check_results');assert.equal(query.filters.user_id,user);assert.equal(query.limit,3);
+ assert.equal((await api.GET(request({},'22222222-2222-4222-8222-222222222222'))).status,404);
+ calls=[];await api.DELETE(request({id:resultId}));assert.equal(calls.find(c=>c.delete).filters.user_id,user);
+ dbError=true;assert.equal((await api.GET(request())).status,401);dbError=false;
+ user=null;assert.equal((await api.POST(request(body))).status,401);
+ console.log('PASS self-check: validation, score boundaries, top symptoms, age mapping, recommendations, guest isolation, ownership, consent, server scoring, idempotence, delete and errors');
+})().catch(e=>{console.error(e);process.exitCode=1});
