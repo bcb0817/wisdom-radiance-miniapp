@@ -1,7 +1,9 @@
 import {NextRequest,NextResponse} from "next/server";
 import {adminSupabase} from "../../../../lib/supabase/admin";
 import {accountId,sameOrigin,isAccountBlocked} from "../../../../lib/accountSession";
+import {COMMUNITY_REPLIES_ENABLED} from "../../../../lib/features";
 export async function POST(r:NextRequest){try{
+ if(!COMMUNITY_REPLIES_ENABLED)return NextResponse.json({error:"返信機能は現在お休みしています"},{status:403});
  if(!sameOrigin(r))return NextResponse.json({error:"Invalid origin"},{status:403});
  const id=await accountId(r);if(!id||!adminSupabase)return NextResponse.json({error:"マイページでプロフィールを準備してください"},{status:401});
  if(await isAccountBlocked(id))return NextResponse.json({error:"投稿を制限しています"},{status:403});
