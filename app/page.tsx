@@ -1,6 +1,40 @@
 "use client";
-import CheckIntro from "../components/check/CheckIntro";
-import SaveStoryButton from "../components/SaveStoryButton";
-import WeeklyStories from "../components/WeeklyStories";import StoryViewTracker from "../components/StoryViewTracker";
-import {useState} from "react";import {useRouter} from "next/navigation";import {stories,topics,Story} from "../lib/mockData";
-export default function Home(){const router=useRouter();const [selected,setSelected]=useState<Story|null>(null);const [query,setQuery]=useState("");const filtered=stories.filter(s=>!query||[s.title,s.topic,s.intro,...s.tags].join(" ").includes(query));if(selected)return <main className="phone-shell"><section className="page-content detail-content"><button className="back-link" onClick={()=>setSelected(null)}>← ホームへ戻る</button><div className="post-detail"><StoryViewTracker storyId={selected.id}/><h1>{selected.title}</h1><p className="detail-body">{selected.intro}</p><SaveStoryButton storyId={selected.id}/><button className="primary-button" onClick={()=>router.push(`/community/new?topic=${encodeURIComponent(selected.topic)}`)}>このテーマでみんなに相談する</button></div></section></main>;return <main className="phone-shell"><header className="page-header"><p>WISDOM VOICE</p><h1>誰にも言えなかったことを、ここで少しだけ。</h1><span>ここは、同じような悩みやゆらぎを持つ人の声に触れながら、<br/>自分らしく向き合うヒントを見つけていく場所です。</span></header><section className="page-content"><CheckIntro/><section className="safety-notice"><strong>管理者からのお知らせ</strong><p>安心してご利用いただけるよう、最新のお知らせを掲載します。</p><p>現在のお知らせはありません。</p></section><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="悩みやゆらぎを検索" className="community-form input"/><h2>よく検索されているテーマ</h2><div className="topic-scroll">{topics.map(t=><button key={t} onClick={()=>router.push(`/community?topic=${encodeURIComponent(t)}`)}>{t}</button>)}</div>{!query?<WeeklyStories/>:<><div className="community-actions"><h2>検索結果</h2><span className="result-count">{filtered.length}件</span></div><div className="post-list">{filtered.map(s=><button key={s.id} className="community-card" onClick={()=>setSelected(s)}><div className="post-meta"><span className="avatar">{s.age}</span><span>{s.age}歳の体験</span></div><h2>{s.title}</h2><p>{s.intro}</p></button>)}</div></>}</section></main>}
+import Link from "next/link";
+import {useEffect,useState} from "react";
+import {listPosts} from "../lib/community";
+import {stories} from "../lib/mockData";
+import {getBlockedUsers} from "../lib/moderation";
+import type {CommunityPost} from "../lib/types";
+import PostCard from "../components/community/PostCard";
+import StoryCard from "../components/community/StoryCard";
+import VoiceIcon,{type VoiceIconName} from "../components/VoiceIcon";
+
+import HomeAccess from "../components/HomeAccess";
+const topics:{label:string;icon:VoiceIconName;color:string}[]=[
+ {label:"戸惑い・不安",icon:"heart",color:"#cf7f83"},{label:"気分の落ち込み",icon:"cloud",color:"#82afad"},
+ {label:"疲れ・倦怠感",icon:"waves",color:"#82afb2"},{label:"不眠",icon:"moon",color:"#a397cd"},
+ {label:"イライラ・怒り",icon:"bolt",color:"#e9b453"},{label:"ほてり・発汗",icon:"drop",color:"#d7887a"},
+ {label:"体重・体型の変化",icon:"body",color:"#b7b875"},{label:"その他",icon:"more",color:"#7d9b98"}
+];
+export default function Home(){
+ const [post,setPost]=useState<CommunityPost|null>(null),[loading,setLoading]=useState(true);
+ useEffect(()=>{let active=true;listPosts().then(rows=>{if(active){const blocked=getBlockedUsers();setPost(rows.find(p=>!blocked.includes(p.displayName))||null);}}).catch(()=>{}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[]);
+ const fallback=stories[0];
+ return <main className="phone-shell home-page">
+  <header className="page-header home-header"><h1>WISDOM VOICE</h1><p>「私だけじゃなかった」と思える場所。</p></header>
+  <div className="page-content home-content">
+   <section aria-labelledby="topics-heading"><h2 id="topics-heading" className="home-section-title"><VoiceIcon name="leaf"/>気になるゆらぎから探す</h2><div className="topic-grid">{topics.map(t=><Link href={`/community?topic=${encodeURIComponent(t.label)}`} key={t.label}><VoiceIcon name={t.icon} style={{color:t.color}}/><span>{t.label}</span></Link>)}</div></section>
+   <section aria-labelledby="recent-heading"><h2 id="recent-heading" className="home-section-title">最近届いた声</h2>
+    {loading?<p className="lead" role="status">声を読み込んでいます…</p>:post?<PostCard post={post}/>:<StoryCard story={fallback}/>}
+   </section>
+   <Link href="/community/new" className="home-post-cta"><VoiceIcon name="pen"/><span><strong>あなたの声も聞かせてください</strong><small>匿名で投稿できます</small></span><svg className="cta-rays" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M7 15 10 5M14 19 21 11M19 25 29 22" fill="none" stroke="#edc477" strokeWidth="2.5" strokeLinecap="round"/></svg></Link>
+   <details className="home-more"><summary>リンク・ご利用について</summary><HomeAccess/></details>
+  </div>
+
+ </main>;
+}
+
+
+
+
+

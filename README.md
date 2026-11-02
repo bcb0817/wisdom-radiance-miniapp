@@ -27,3 +27,19 @@ LINE外の通常ブラウザでは閲覧を利用でき、LINE内ではLIFFのLI
 8. 投稿へ返信する
 9. マイページに本人の投稿・返信・保存が表示される
 10. 公式LINEの友だち追加導線を確認する
+
+## ホーム画面と共感
+
+ホームは添付の画面案に沿ったコンパクトなUIで、悩み別の入口、最近の公開投稿1件、匿名投稿の導線を表示します。新しい投稿がない場合や読み込みに失敗した場合は、既存の体験談を元の順序で紹介します。ブロックした表示名は新着から除外します。セルフチェックはホームに表示しません（既存の `/check` は維持）。
+
+コミュニティのユーザー投稿と取り込み済みのExcel体験談の両方に、共感ボタン、件数、本人の共感状態の復元、取り消しを追加しています。ホーム・一覧・詳細に表示します。ユーザー投稿は既存の community_reactions、Excel体験談は supabase/migrations/009_story_reactions.sql の story_reactions を使用します。体験談の共感を有効にするにはマイグレーションを適用し、サーバー環境の SUPABASE_SERVICE_ROLE_KEY を設定してください。未設定や読み込みエラー時は、共感ボタンを無効にし、件数を「—」で表示します。
+
+`NEXT_PUBLIC_LIFF_ID` を設定すると、ホームにLINEで開く・リンクをコピーする導線が表示されます。環境ごとのIDを必ず使用してください。共有リンクは `https://miniapp.line.me/{LIFF ID}` です。LINE内かつAPIが利用可能な場合のみ、公式のホーム画面追加機能を表示します。本番での利用には認証済みミニアプリが必要です（未認証でも開発用チャネルでテスト可能）。
+
+外部のゲストとLINEのアカウントを自動統合する変更は行っていません。LINEに紐づいたプロフィールの再利用には同じLINEアカウントでミニアプリを開いてください。ゲストのデータは元のブラウザに残ります。
+
+検証: `node tests/community-reactions.cjs`、`node tests/account-session.cjs`、`node tests/story-saves.cjs`、`npx tsc --noEmit`、`npm run build`。
+
+公式仕様: https://developers.line.biz/ja/docs/line-mini-app/develop/add-to-home-screen/ 、https://developers.line.biz/ja/docs/line-mini-app/develop/permanent-links/
+
+
