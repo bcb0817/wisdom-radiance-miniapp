@@ -43,3 +43,9 @@ LINE外の通常ブラウザでは閲覧を利用でき、LINE内ではLIFFのLI
 公式仕様: https://developers.line.biz/ja/docs/line-mini-app/develop/add-to-home-screen/ 、https://developers.line.biz/ja/docs/line-mini-app/develop/permanent-links/
 
 
+
+## 公式LINEへの友だち追加案内
+
+LINE認証がサーバーで成功した後に、公式LINE（https://line.me/R/ti/p/@429gonyu）への案内ダイアログを表示します。「あとで」または友だち追加リンクを選ぶと、同じブラウザでは次回から自動表示しません（localStorageに保存。端末間の同期や友だち追加済み判定は行いません）。ゲスト利用時・認証失敗時・管理画面・規約ページでは自動表示しません。ホームには常設の案内カードもあります。実際の友だち追加はLINE側で利用者が操作します。
+
+認証成功時のみ案内対象になることは `node tests/line-session.cjs` で検証できます。

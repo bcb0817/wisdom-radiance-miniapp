@@ -9,6 +9,7 @@ import PostCard from "../components/community/PostCard";
 import StoryCard from "../components/community/StoryCard";
 import VoiceIcon,{type VoiceIconName} from "../components/VoiceIcon";
 
+import OfficialLineInvite from "../components/OfficialLineInvite";
 import HomeAccess from "../components/HomeAccess";
 const topics:{label:string;icon:VoiceIconName;color:string}[]=[
  {label:"戸惑い・不安",icon:"heart",color:"#cf7f83"},{label:"気分の落ち込み",icon:"cloud",color:"#82afad"},
@@ -28,11 +29,13 @@ export default function Home(){
     {loading?<p className="lead" role="status">声を読み込んでいます…</p>:post?<PostCard post={post}/>:<StoryCard story={fallback}/>}
    </section>
    <Link href="/community/new" className="home-post-cta"><VoiceIcon name="pen"/><span><strong>あなたの声も聞かせてください</strong><small>匿名で投稿できます</small></span><svg className="cta-rays" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M7 15 10 5M14 19 21 11M19 25 29 22" fill="none" stroke="#edc477" strokeWidth="2.5" strokeLinecap="round"/></svg></Link>
+   <OfficialLineInvite/>
    <details className="home-more"><summary>リンク・ご利用について</summary><HomeAccess/></details>
   </div>
 
  </main>;
 }
+
 
 
 
