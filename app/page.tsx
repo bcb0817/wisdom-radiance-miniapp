@@ -18,8 +18,9 @@ const topics:{label:string;icon:VoiceIconName;color:string}[]=[
  {label:"体重・体型の変化",icon:"body",color:"#b7b875"},{label:"その他",icon:"more",color:"#7d9b98"}
 ];
 export default function Home(){
- const [post,setPost]=useState<CommunityPost|null>(null),[loading,setLoading]=useState(true);
- useEffect(()=>{let active=true;listPosts().then(rows=>{if(active){const blocked=getBlockedUsers();setPost(rows.find(p=>!blocked.includes(p.displayName))||null);}}).catch(()=>{}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[]);
+ const [posts,setPosts]=useState<CommunityPost[]>([]),[loading,setLoading]=useState(true),[loadError,setLoadError]=useState(false);
+ useEffect(()=>{let active=true;listPosts().then(rows=>{if(active){const blocked=getBlockedUsers();setPosts(rows.filter(p=>!blocked.includes(p.displayName)).slice(0,6));}}).catch(()=>{if(active)setLoadError(true);}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[]);
+ const post=posts[0],olderPosts=posts.slice(1);
  const fallback=stories[0];
  return <main className="phone-shell home-page">
   <header className="page-header home-header"><h1>WISDOM VOICE</h1><p>「私だけじゃなかった」と思える場所。</p></header>
@@ -31,15 +32,10 @@ export default function Home(){
    </section>
    <Link href="/community/new" className="home-post-cta"><VoiceIcon name="pen"/><span><strong>あなたの声も聞かせてください</strong><small>匿名で投稿できます</small></span><svg className="cta-rays" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M7 15 10 5M14 19 21 11M19 25 29 22" fill="none" stroke="#edc477" strokeWidth="2.5" strokeLinecap="round"/></svg></Link>
 
+   {!loading&&olderPosts.length>0&&<section aria-labelledby="older-voices-heading"><h2 id="older-voices-heading" className="home-section-title">これまでに届いた声</h2><div className="post-list">{olderPosts.map(p=><PostCard key={p.id} post={p}/>)}</div><Link href="/community" className="home-all-voices">みんなの体験談をもっと見る →</Link></section>}
+   {loadError&&<p className="lead" role="status">新しい投稿を読み込めませんでした。時間をおいて再度お試しください。</p>}
    <details className="home-more"><summary>リンク・ご利用について</summary><HomeAccess/></details>
   </div>
 
  </main>;
 }
-
-
-
-
-
-
-

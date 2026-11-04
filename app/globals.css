@@ -55,3 +55,5 @@
 .official-line-banner a{flex:none;border-radius:9px;background:#06a94f;color:#fff;padding:10px;font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap}
 .official-line-banner a:focus-visible{outline:3px solid #167b68;outline-offset:3px}
 @media(max-width:359px){.official-line-banner{gap:7px;padding:10px}.official-line-banner a{padding:9px 7px;font-size:10px}}
+.home-all-voices{display:block;margin-top:16px;border:1px solid #d9e8e2;border-radius:11px;padding:11px;text-align:center;color:#167b68;background:#fff;font-size:12px;text-decoration:none}
+.home-all-voices:focus-visible{outline:2px solid #167b68;outline-offset:3px}
