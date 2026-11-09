@@ -1,8 +1,8 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript');
 const source=ts.transpileModule(fs.readFileSync('app/api/auth/line/route.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
-let valid=true,found=true,verifiedCalls=0,sessionWrites=[];
+let valid=true,found=true,verifiedCalls=0,sessionWrites=[],audience="2011371704";
 const mod={exports:{}};
-vm.runInNewContext(source,{exports:mod.exports,URLSearchParams,process:{env:{LINE_CHANNEL_ID:'test-channel'}},fetch:async()=>{verifiedCalls++;return {ok:valid,json:async()=>({iss:'https://access.line.me',aud:'test-channel',sub:'line-user'})}},require(id){
+vm.runInNewContext(source,{exports:mod.exports,URLSearchParams,process:{env:{NEXT_PUBLIC_LIFF_ID:'2011371704-Dwbl8R0d'}},fetch:async(_url,opts)=>{verifiedCalls++;assert.equal(opts.body.get('client_id'),'2011371704');return {ok:valid,json:async()=>({iss:'https://access.line.me',aud:audience,sub:'line-user'})}},require(id){
  if(id==='next/server')return {NextResponse:{json:(body,opts={})=>({body,status:opts.status||200,cookies:{set(){}}})}};
  if(id.endsWith('/accountSession'))return {readSession:r=>r.session,sameOrigin:r=>r.sameOrigin,anonymousName:()=> 'test',setSession:(res,id,kind)=>sessionWrites.push({id,kind})};
  if(id.endsWith('/supabase/admin'))return {adminSupabase:{from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>({data:found?{id:'existing-line-account'}:null})})}),insert:()=>({select:()=>({single:async()=>({data:null})})})})}};
@@ -14,7 +14,7 @@ const api=mod.exports,req=(opts={})=>({sameOrigin:true,session:{kind:'guest'},js
  assert.equal((await api.POST(req())).status,409);assert.equal(verifiedCalls,0);
  assert.equal((await api.POST({...req({replaceGuest:true}),sameOrigin:false})).status,403);
  valid=false;assert.equal((await api.POST(req({replaceGuest:true}))).status,401);assert.equal(sessionWrites.length,0);
- valid=true;found=false;assert.equal((await api.POST(req({replaceGuest:true}))).status,503);assert.equal(sessionWrites.length,0);
+ valid=true;audience="2011371701";assert.equal((await api.POST(req({replaceGuest:true}))).status,401);assert.equal(sessionWrites.length,0);audience="2011371704";found=false;assert.equal((await api.POST(req({replaceGuest:true}))).status,503);assert.equal(sessionWrites.length,0);
  found=true;assert.equal((await api.POST(req({replaceGuest:true}))).status,200);assert.equal(sessionWrites.length,1);assert.equal(sessionWrites[0].id,'existing-line-account');assert.equal(sessionWrites[0].kind,'line');
  console.log('PASS: opt-in only; invalid token or unavailable LINE account preserves guest cookie; success replaces it');
 })().catch(e=>{console.error(e);process.exitCode=1});

@@ -8,7 +8,10 @@ export default function SwitchToLine(){
  useEffect(()=>{
   let active=true;
   ensureAccount().then(async()=>{
-   if(!active||!process.env.NEXT_PUBLIC_LIFF_ID||!liff.isInClient()||!liff.isLoggedIn()||!liff.getIDToken())return;
+   if(!active||!process.env.NEXT_PUBLIC_LIFF_ID)return;
+   let inLine=/(?:^|\s)Line\//i.test(navigator.userAgent);
+   try{inLine=inLine||liff.isInClient();}catch{/* Keep the LINE browser fallback. */}
+   if(!inLine)return;
    const r=await fetch("/api/auth/line",{cache:"no-store"});
    if(r.ok&& (await r.json()).guest===true&&active)setVisible(true);
   }).catch(()=>{});
